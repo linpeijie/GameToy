@@ -21,6 +21,7 @@ int checkNeighborWalls(std::vector<std::vector <int> >, int, int);
 std::list<Coord> getRegionPoints(std::vector<std::vector <int> > M, int, int);
 std::list<std::list<Coord> > getRegions(std::vector<std::vector <int> >, int);
 void processMap(std::vector<std::vector <int> > &);
+void processRegion(std::vector<std::vector <int> > &M, int, int);
 void printMap(std::vector<std::vector <int> >);
 
 int main()
@@ -62,7 +63,7 @@ std::vector<std::vector <int> > createMap()
     return initMap;
 }
 
-/* 生成地图 */
+/* 生成随机地图 */
 void generateMap(std::vector<std::vector <int> > &initMap)
 {
     for (int x = 0; x < width; ++x)
@@ -88,7 +89,7 @@ int checkNeighborWalls(std::vector<std::vector <int> > M, int x, int y)
         {
             if ((i >= 0 && i < width) && (j >=0 && j < height))    // 判断是否超出边界
             {
-                if (i != x || j != y)
+                if (i != x || j != y)  // 某个点本身是不计算在内的
                     count += M[i][j];
             }else
                 count++;    // 如果这个点周围的某个点超过边界，则该点一定在边界上，值一定得设为1，故直接count++
@@ -97,39 +98,31 @@ int checkNeighborWalls(std::vector<std::vector <int> > M, int x, int y)
     return count;
 }
 
-/* 将小于某个值的区域消除 */
+/* 处理地图 */
 void processMap(std::vector<std::vector <int> > &M)
 {
     /* 消除墙壁 */
-    std::list<std::list<Coord> > wallRegions = getRegions(M, 1);
-    int wallThresholdSize = 5;
+    processRegion(M, 1, 5);
 
-    for (auto wallregion:wallRegions)
+    /* 消除洞穴 */
+    processRegion(M, 0, 15);
+}
+
+/* 区域清除 */
+void processRegion(std::vector<std::vector <int> > &M, int pointType, int thresholdSize)
+{
+    std::list<std::list<Coord> > regions = getRegions(M, pointType);
+
+    for (auto region:regions)
     {
-        if (wallregion.size() < wallThresholdSize)
+        if (region.size() < thresholdSize)
         {
-            for (auto point:wallregion)
+            for (auto point:region)
             {
-                M[point.x][point.y] = 0;
+                M[point.x][point.y] = !pointType;
             }
         }
     }
-
-    /* 消除房间 */
-    std::list<std::list<Coord> > roomRegions = getRegions(M, 0);
-    int roomThresholdSize = 20;
-
-    for (auto roomregion:roomRegions)
-    {
-        if (roomregion.size() < roomThresholdSize)
-        {
-            for (auto point:roomregion)
-            {
-                M[point.x][point.y] = 1;
-            }
-        }
-    }
-
 }
 
 /* 返回地图中某类区域的集合 */
@@ -160,7 +153,7 @@ std::list<Coord> getRegionPoints(std::vector<std::vector <int> > M, int startX, 
 {
     std::list<Coord> points;  // 存储一个区域内的所有点
     std::vector<std::vector<int> > mapFlags(width, std::vector<int>(height));  // 标记相同区域的点
-    int pointType = M[startX][startY];  // 起始点的类型（墙，房间）
+    int pointType = M[startX][startY];  // 起始点的类型（墙/房间）
 
     std::queue<Coord> queue;  // 存储遍历的每个点
     queue.push(Coord(startX, startY));
@@ -177,9 +170,10 @@ std::list<Coord> getRegionPoints(std::vector<std::vector <int> > M, int startX, 
         {
             for (int y = point.y - 1; y <= point.y + 1; ++y)
             {
+                /* 判断该点是否属于上下左右四个点之一 */
                 if ((x >= 0 && x < width) && (y >=0 && y < height) && (y == point.y || x == point.x))
                 {
-                    if (mapFlags[x][y] == 0 && M[x][y] == pointType)
+                    if (mapFlags[x][y] == 0 && M[x][y] == pointType)  // 该点是指定类型才做记录
                     {
                         mapFlags[x][y] = 1;
                         queue.push(Coord(x, y));
@@ -190,6 +184,12 @@ std::list<Coord> getRegionPoints(std::vector<std::vector <int> > M, int startX, 
     }
     return points;
 }
+
+class Room {
+public:
+    std::list<Coord> points;
+
+};
 
 /* 打印地图 */
 void printMap(std::vector<std::vector <int> > M)
