@@ -185,12 +185,6 @@ std::list<Coord> getRegionPoints(std::vector<std::vector <int> > M, int startX, 
     return points;
 }
 
-class Room {
-public:
-    std::list<Coord> points;
-
-};
-
 /* 打印地图 */
 void printMap(std::vector<std::vector <int> > M)
 {
