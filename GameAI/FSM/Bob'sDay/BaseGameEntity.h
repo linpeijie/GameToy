@@ -15,7 +15,7 @@ class BaseGameEntity
 private:
 
   //every entity must have a unique identifying number
-  int          m_ID;
+  int m_ID;
 
   //this is the next valid ID. Each time a BaseGameEntity is instantiated
   //this value is updated
@@ -29,15 +29,18 @@ private:
 
 public:
 
+  /* 初始化, 设置人物的id */
   BaseGameEntity(int id)
   {
     SetID(id);
   }
 
+  /* 虚类，表示继承了该类的子类必须执行以下所有虚函数 */
   virtual ~BaseGameEntity(){}
 
+  /* 纯虚函数 */
   //all entities must implement an update function
   virtual void  Update()=0;
 
-  int           ID()const{return m_ID;}
+  int ID()const{return m_ID;}
 };

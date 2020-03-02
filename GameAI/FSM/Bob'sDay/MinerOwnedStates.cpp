@@ -3,7 +3,7 @@
 #include "EntityNames.h"
 
 #include <iostream>
-using std::cout;
+using namespace std;
 
 //define this to output to a file
 #ifdef TEXTOUTPUT
@@ -13,8 +13,7 @@ extern std::ofstream os;
 #endif
 
 
-//--------------------------------------methods for EnterMineAndDigForNugget
-
+/* methods for EnterMineAndDigForNugget */
 EnterMineAndDigForNugget* EnterMineAndDigForNugget::Instance()
 {
   static EnterMineAndDigForNugget instance;
@@ -29,12 +28,11 @@ void EnterMineAndDigForNugget::Enter(Miner* pMiner)
   if (pMiner->Location() != goldmine)
   {
 
-    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Walkin' to the goldmine";
+    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "走到金矿场";
 
     pMiner->ChangeLocation(goldmine);
   }
 }
-
 
 void EnterMineAndDigForNugget::Execute(Miner* pMiner)
 {
@@ -45,7 +43,7 @@ void EnterMineAndDigForNugget::Execute(Miner* pMiner)
 
   pMiner->IncreaseFatigue();
 
-  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Pickin' up a nugget";
+  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "挖到一块金块！";
 
   //if enough gold mined, go and put it in the bank
   if (pMiner->PocketsFull())
@@ -59,11 +57,10 @@ void EnterMineAndDigForNugget::Execute(Miner* pMiner)
   }
 }
 
-
 void EnterMineAndDigForNugget::Exit(Miner* pMiner)
 {
   cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": "
-       << "Ah'm leavin' the goldmine with mah pockets full o' sweet gold";
+       << "口袋里装满了黄金，哼着小曲离开了矿场。";
 }
 
 
@@ -84,7 +81,7 @@ void VisitBankAndDepositGold::Enter(Miner* pMiner)
   if (pMiner->Location() != bank)
   {
 
-    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Goin' to the bank. Yes siree";
+    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "该把沉甸甸的金子存到银行里了！";
 
     pMiner->ChangeLocation(bank);
   }
@@ -100,14 +97,14 @@ void VisitBankAndDepositGold::Execute(Miner* pMiner)
   pMiner->SetGoldCarried(0);
 
   cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": "
-       << "Depositing gold. Total savings now: "<< pMiner->Wealth();
+       << "存好黄金，银行账户里的金额为: "<< pMiner->Wealth();
 
   //wealthy enough to have a well earned rest?
   if (pMiner->Wealth() >= ComfortLevel)
   {
 
     cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": "
-         << "WooHoo! Rich enough for now. Back home to mah li'lle lady";
+         << "已经十分有钱了，是时候下班回家了！";
 
     pMiner->ChangeState(GoHomeAndSleepTilRested::Instance());
   }
@@ -122,7 +119,7 @@ void VisitBankAndDepositGold::Execute(Miner* pMiner)
 
 void VisitBankAndDepositGold::Exit(Miner* pMiner)
 {
-  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Leavin' the bank";
+  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "离开银行。";
 }
 
 
@@ -140,7 +137,7 @@ void GoHomeAndSleepTilRested::Enter(Miner* pMiner)
   if (pMiner->Location() != shack)
   {
 
-    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Walkin' home";
+    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "走回家,准备好好休息一下。";
 
     pMiner->ChangeLocation(shack);
   }
@@ -153,7 +150,7 @@ void GoHomeAndSleepTilRested::Execute(Miner* pMiner)
   {
 
     cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": "
-          << "What a God darn fantastic nap! Time to find more gold";
+          << "睡了一个好觉，该去继续挖金子了！";
 
      pMiner->ChangeState(EnterMineAndDigForNugget::Instance());
   }
@@ -170,7 +167,7 @@ void GoHomeAndSleepTilRested::Execute(Miner* pMiner)
 
 void GoHomeAndSleepTilRested::Exit(Miner* pMiner)
 {
-  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Leaving the house";
+  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "离开家。";
 }
 
 
@@ -191,7 +188,7 @@ void QuenchThirst::Enter(Miner* pMiner)
   {
     pMiner->ChangeLocation(saloon);
 
-    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Boy, ah sure is thusty! Walking to the saloon";
+    cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "快渴死了！他走向了酒馆！";
   }
 }
 
@@ -201,7 +198,7 @@ void QuenchThirst::Execute(Miner* pMiner)
    {
      pMiner->BuyAndDrinkAWhiskey();
 
-     cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "That's mighty fine sippin liquer";
+     cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "灌满了酒杯，痛饮了一番！";
 
      pMiner->ChangeState(EnterMineAndDigForNugget::Instance());
   }
@@ -214,6 +211,6 @@ void QuenchThirst::Execute(Miner* pMiner)
 
 void QuenchThirst::Exit(Miner* pMiner)
 {
-  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "Leaving the saloon, feelin' good";
+  cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "酒足饭饱之后，他离开了酒馆。";
 }
 

@@ -12,20 +12,14 @@
 #include "BaseGameEntity.h"
 #include "Locations.h"
 
-
 class State;
 
-//the amount of gold a miner must have before he feels comfortable
-const int ComfortLevel       = 5;
-//the amount of nuggets a miner can carry
-const int MaxNuggets         = 3;
-//above this value a miner is thirsty
-const int ThirstLevel        = 5;
-//above this value a miner is sleepy
-const int TirednessThreshold = 5;
+const int ComfortLevel       = 5;  //银行账户存满多少钱，则回家休息
+const int MaxNuggets         = 3;  //口袋最多能放多少金子
+const int ThirstLevel        = 5;  //多久后人物感到口渴
+const int TirednessThreshold = 5;  //多久后人物感到累
 
-
-
+/* 所有类都必须继承BaseGameENtity基础类 */
 class Miner : public BaseGameEntity
 {
 private:
@@ -57,8 +51,6 @@ public:
   //new state to m_pCurrentState and finally calls the Entry()
   //method of the new state.
   void ChangeState(State* new_state);
-
-
 
   location_type Location()const{return m_Location;}
   void          ChangeLocation(const location_type loc){m_Location=loc;}

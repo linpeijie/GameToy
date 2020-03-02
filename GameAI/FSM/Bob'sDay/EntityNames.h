@@ -1,3 +1,6 @@
+/*
+小镇上居民的名字
+*/
 #include <string>
 
 enum
