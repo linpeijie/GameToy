@@ -7,6 +7,8 @@
 //  Author: Mat Buckland 2002 (fup@ai-junkie.com)
 //
 //------------------------------------------------------------------------
+#ifndef STATE_H
+#define STATE_H
 
 class Miner;
 
@@ -27,3 +29,5 @@ public:
   virtual void Exit(Miner*)=0;
 
 };
+
+#endif

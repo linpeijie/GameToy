@@ -7,6 +7,9 @@
 //  Author: Mat Buckland 2002 (fup@ai-junkie.com)
 //
 //------------------------------------------------------------------------
+#ifndef MINER_H
+#define MINER_H
+
 #include <string>
 #include <cassert>
 #include "BaseGameEntity.h"
@@ -72,3 +75,5 @@ public:
   void          BuyAndDrinkAWhiskey(){m_iThirst = 0; m_iMoneyInBank-=2;}
 
 };
+
+#endif

@@ -1,6 +1,9 @@
 /*
 小镇上居民的名字
 */
+#ifndef ENTITY_NAMES_H
+#define ENTITY_NAMES_H
+
 #include <string>
 
 enum
@@ -27,3 +30,5 @@ inline std::string GetNameOfEntity(int n)
     return "UNKNOWN!";
   }
 }
+
+#endif

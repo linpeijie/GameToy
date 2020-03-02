@@ -7,7 +7,8 @@
 //  Author: Mat Buckland 2002 (fup@ai-junkie.com)
 //
 //------------------------------------------------------------------------
-
+#ifndef BASE_GAME_ENTITY_H
+#define BASE_GAME_ENTITY_H
 
 class BaseGameEntity
 {
@@ -44,3 +45,5 @@ public:
 
   int ID()const{return m_ID;}
 };
+
+#endif
