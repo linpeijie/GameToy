@@ -3,7 +3,7 @@
 
 int main()
 {
-  /*创建一个对象Bob*/
+  /*创建一个对象Bob，id = 0*/
   Miner minerBob(ent_Miner_Bob);
 
   /* 一天中，Bob每个小时更新一次状态 */

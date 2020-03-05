@@ -27,52 +27,53 @@ class Miner : public BaseGameEntity
 {
 private:
 
-  State*                m_pCurrentState;
+    State* m_pCurrentState;
+    location_type m_Location;
 
-  location_type         m_Location;
+    //矿工可携带的金子数量
+    int m_iGoldCarried;
 
-  //how many nuggets the miner has in his pockets
-  int                   m_iGoldCarried;
+    //银行账户余额
+    int m_iMoneyInBank;
 
-  int                   m_iMoneyInBank;
+    //饥渴值
+    int m_iThirst;
 
-  //the higher the value, the thirstier the miner
-  int                   m_iThirst;
-
-  //the higher the value, the more tired the miner
-  int                   m_iFatigue;
+    //疲劳值
+    int m_iFatigue;
 
 public:
 
-  Miner(int id);
+    Miner(int id);
+    //必须实现
+    void Update();
 
-  //this must be implemented
-  void Update();
+    //改变当前状态到新的状态
+    void ChangeState(State* new_state);
 
-  //this method changes the current state to the new state. It first
-  //calls the Exit() method of the current state, then assigns the
-  //new state to m_pCurrentState and finally calls the Entry()
-  //method of the new state.
-  void ChangeState(State* new_state);
+    //移动位置
+    location_type Location()const{return m_Location;}
+    void ChangeLocation(const location_type loc){m_Location=loc;}
 
-  location_type Location()const{return m_Location;}
-  void          ChangeLocation(const location_type loc){m_Location=loc;}
+    //计算携带的金子数量
+    int  GoldCarried()const{return m_iGoldCarried;}
+    void SetGoldCarried(const int val){m_iGoldCarried = val;}
+    void AddToGoldCarried(const int val);
+    bool PocketsFull()const{return m_iGoldCarried >= MaxNuggets;}
 
-  int           GoldCarried()const{return m_iGoldCarried;}
-  void          SetGoldCarried(const int val){m_iGoldCarried = val;}
-  void          AddToGoldCarried(const int val);
-  bool          PocketsFull()const{return m_iGoldCarried >= MaxNuggets;}
+    //计算疲劳值
+    bool Fatigued()const;
+    void DecreaseFatigue(){m_iFatigue -= 1;}
+    void IncreaseFatigue(){m_iFatigue += 1;}
 
-  bool          Fatigued()const;
-  void          DecreaseFatigue(){m_iFatigue -= 1;}
-  void          IncreaseFatigue(){m_iFatigue += 1;}
+    //计算银行账户余额
+    int  Wealth()const{return m_iMoneyInBank;}
+    void SetWealth(const int val){m_iMoneyInBank = val;}
+    void AddToWealth(const int val);
 
-  int           Wealth()const{return m_iMoneyInBank;}
-  void          SetWealth(const int val){m_iMoneyInBank = val;}
-  void          AddToWealth(const int val);
-
-  bool          Thirsty()const;
-  void          BuyAndDrinkAWhiskey(){m_iThirst = 0; m_iMoneyInBank-=2;}
+    //计算饥渴值
+    bool Thirsty()const;
+    void BuyAndDrinkAWhiskey(){m_iThirst = 0; m_iMoneyInBank-=2;}
 
 };
 
