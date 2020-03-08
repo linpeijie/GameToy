@@ -50,7 +50,6 @@ void EnterMineAndDigForNugget::Execute(Miner* pMiner)
   {
     pMiner->ChangeState(QuenchThirst::Instance());
   }
-
 }
 
 void EnterMineAndDigForNugget::Exit(Miner* pMiner)
@@ -61,7 +60,8 @@ void EnterMineAndDigForNugget::Exit(Miner* pMiner)
 
 
 
-/*methods for VisitBankAndDepositGold*/
+//----------------------------------------methods for VisitBankAndDepositGold
+
 VisitBankAndDepositGold* VisitBankAndDepositGold::Instance()
 {
   static VisitBankAndDepositGold instance;
@@ -118,7 +118,8 @@ void VisitBankAndDepositGold::Exit(Miner* pMiner)
 }
 
 
-/*methods for GoHomeAndSleepTilRested*/
+//----------------------------------------methods for GoHomeAndSleepTilRested
+
 GoHomeAndSleepTilRested* GoHomeAndSleepTilRested::Instance()
 {
   static GoHomeAndSleepTilRested instance;
@@ -167,7 +168,8 @@ void GoHomeAndSleepTilRested::Exit(Miner* pMiner)
 
 
 
-/*methods for QuenchThirst*/
+//------------------------------------------------methods for QuenchThirst
+
 QuenchThirst* QuenchThirst::Instance()
 {
   static QuenchThirst instance;

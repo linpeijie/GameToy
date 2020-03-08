@@ -23,9 +23,11 @@ EnterMineAndDigForNugget* EnterMineAndDigForNugget::Instance()
 
 void EnterMineAndDigForNugget::Enter(Miner* pMiner)
 {
-  //如果Miner不在矿场，则走到矿场
+  //if the miner is not already located at the goldmine, he must
+  //change location to the gold mine
   if (pMiner->Location() != goldmine)
   {
+
     cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "走到金矿场";
 
     pMiner->ChangeLocation(goldmine);
@@ -34,13 +36,16 @@ void EnterMineAndDigForNugget::Enter(Miner* pMiner)
 
 void EnterMineAndDigForNugget::Execute(Miner* pMiner)
 {
-  //Miner挖满金子后，会改变状态为“到银行存钱”；如果渴了，会改变状态为“到酒馆解渴”
+  //the miner digs for gold until he is carrying in excess of MaxNuggets.
+  //If he gets thirsty during his digging he packs up work for a while and
+  //changes state to go to the saloon for a whiskey.
   pMiner->AddToGoldCarried(1);
 
   pMiner->IncreaseFatigue();
 
   cout << "\n" << GetNameOfEntity(pMiner->ID()) << ": " << "挖到一块金块！";
 
+  //if enough gold mined, go and put it in the bank
   if (pMiner->PocketsFull())
   {
     pMiner->ChangeState(VisitBankAndDepositGold::Instance());
@@ -50,7 +55,6 @@ void EnterMineAndDigForNugget::Execute(Miner* pMiner)
   {
     pMiner->ChangeState(QuenchThirst::Instance());
   }
-
 }
 
 void EnterMineAndDigForNugget::Exit(Miner* pMiner)
@@ -61,7 +65,8 @@ void EnterMineAndDigForNugget::Exit(Miner* pMiner)
 
 
 
-/*methods for VisitBankAndDepositGold*/
+//----------------------------------------methods for VisitBankAndDepositGold
+
 VisitBankAndDepositGold* VisitBankAndDepositGold::Instance()
 {
   static VisitBankAndDepositGold instance;
@@ -118,7 +123,8 @@ void VisitBankAndDepositGold::Exit(Miner* pMiner)
 }
 
 
-/*methods for GoHomeAndSleepTilRested*/
+//----------------------------------------methods for GoHomeAndSleepTilRested
+
 GoHomeAndSleepTilRested* GoHomeAndSleepTilRested::Instance()
 {
   static GoHomeAndSleepTilRested instance;
@@ -167,7 +173,8 @@ void GoHomeAndSleepTilRested::Exit(Miner* pMiner)
 
 
 
-/*methods for QuenchThirst*/
+//------------------------------------------------methods for QuenchThirst
+
 QuenchThirst* QuenchThirst::Instance()
 {
   static QuenchThirst instance;
