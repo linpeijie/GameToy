@@ -7,7 +7,8 @@
                 "/usr/local/include",
                 "/Users/include",
                 "/usr/local/Cellar/glfw/3.2.2/lib",
-                "/usr/local/Cellar/glew/2.1.0_1/lib"
+                "/usr/local/Cellar/glew/2.1.0_1/lib",
+                "/usr/local/Cellar/glm/glm"
             ],
             "defines": [],
             "macFrameworkPath": [
