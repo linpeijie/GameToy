@@ -1,0 +1,35 @@
+# $ make
+# $ ./boids
+
+CC = g++
+CFLAGS = -c
+STD = -std=c++11
+DEBUG = -g
+SFML = -lsfml-graphics -lsfml-window -lsfml-system
+
+all: boids
+
+boids: Boid.o Flock.o Pvector2D.o main.o World.o
+	$(CC) $(STD) $(DEBUG) Boid.o Flock.o Pvector2D.o World.o main.o -o boids $(SFML)
+
+Boid.o : Boid.cpp
+	$(CC) $(STD) $(CFLAGS) $(DEBUG) Boid.cpp
+
+Pvector2D.o : Pvector2D.cpp
+	$(CC) $(STD) $(CFLAGS) $(DEBUG) Pvector2D.cpp
+
+Flock.o : Flock.cpp
+	$(CC) $(STD) $(CFLAGS) $(DEBUG) Flock.cpp
+
+World.o : World.cpp
+	$(CC) $(STD) $(CFLAGS) $(DEBUG) World.cpp
+
+clean:
+	\rm edit *.o boids
+
+tar:
+	tar cfv boids.tar \
+	Pvector2D.h Pvector2D.cpp \
+	Boid.h Boid.cpp \
+	Flock.h Flock.cpp \
+	World.cpp World.h
