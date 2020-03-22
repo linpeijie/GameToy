@@ -128,7 +128,7 @@ Vector2D Boid::separation(vector<Boid> boids)
 }
 
 // 队列or速度对齐
-// 计算邻域内智能体的平均速度，使智能体与其一直
+// 计算邻域内智能体的平均速度，使智能体与其一致
 Vector2D Boid::alignment(vector<Boid> boids)
 {
     float nDistance = 50;
