@@ -24,11 +24,15 @@ public:
     void addVector(Vector2D v);
 
     void mulVector(Vector2D v);
-    void mulScalar(float x);
+    void mulScalar(float s);
+
+    void divVector(Vector2D v);
+    void divScalar(float s);
 
     void subVector(Vector2D v);
     Vector2D subTwoVector(Vector2D v, Vector2D v2);
 
+    float distance(Vector2D v);
     void limit(float max);
     // 向量标准化
     float magnitude();

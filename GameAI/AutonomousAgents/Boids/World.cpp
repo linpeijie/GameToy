@@ -39,14 +39,14 @@ void World::handleInput()
         {
             window.close();
         }
+    }
 
-        // 检测鼠标点击事件，绘制一个新的图形
-        if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-        {
-            // 获取鼠标位置
-            sf::Vector2i mouseCoords = sf::Mouse::getPosition(window);
-            creBoid(mouseCoords.x, mouseCoords.y, elapsed.asSeconds());
-        }
+    // 检测鼠标点击事件，绘制一个新的图形
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
+    {
+        // 获取鼠标位置
+        sf::Vector2i mouseCoords = sf::Mouse::getPosition(window);
+        creBoid(mouseCoords.x, mouseCoords.y, elapsed.asSeconds());
     }
 }
 
@@ -58,41 +58,43 @@ void World::render()
     for (int i = 0; i < shapes.size(); ++i)
     {
         window.draw(shapes[i]);
-        shapes[i].setPosition(boids[i].location.x, boids[i].location.y);
+        //shapes[i].setPosition(boids[i].location.x, boids[i].location.y);
+        shapes[i].setPosition(flock.getBoid(i).location.x, flock.getBoid(i).location.y);
+
+        float theta = flock.getBoid(i).angle(flock.getBoid(i).velocity);
+        shapes[i].setRotation(theta);
 
         // 当boid飞出窗口，校正位置
         isOutWindow(i);
     }
 
     // 计算每个boid的运动路径
-    // 这里若不加引用符& 则无法正确运行，原因在于auto是只读的，若要操作类元素，需要引用&
-    for (auto& b: boids)
-    {
-        b.setElapsed(elapsed.asSeconds());
-        b.run();
-    }
-
-
+    // for (auto& b: boids)
+    // {
+    //     b.setElapsed(elapsed.asSeconds());
+    //     b.run();
+    // }
+    flock.flocking(elapsed.asSeconds());
     window.display();
 }
 
 // 创建一个类鸟群
 void World::creBoids(double e)
 {
-    for (int i = 0; i < 20; ++i)
+    for (int i = 0; i < 50; ++i)
     {
         creBoid(windowWidth/2, windowHeight/2, e);
     }
 }
 
 // 在指定位置生成一个 个体
-void World::creBoid(int posX, int posY, double e)
+inline void World::creBoid(int posX, int posY, double e)
 {
     Boid b((float)posX, (float)posY);
     b.setWindow(windowWidth, windowHeight);
     b.setElapsed(e);
-    sf::CircleShape shape(8.f, 3);
     // 更改图形的视觉属性
+    sf::CircleShape shape(8.f, 3);
     shape.setPosition(posX, posY);
     shape.setOutlineColor(sf::Color(0,255,0));
     shape.setFillColor(sf::Color::Green);
@@ -100,12 +102,12 @@ void World::creBoid(int posX, int posY, double e)
     shape.setOutlineThickness(1);
     shape.setRadius(boidSize);
     // boid 和 shape 在数组中位置要一致
-    //flock.addBoid(b);
-    boids.push_back(b);
+    //boids.push_back(b);
+    flock.addBoid(b);
     shapes.push_back(shape);
 }
 
-void World::isOutWindow(int i)
+inline void World::isOutWindow(int i)
 {
     if (shapes[i].getPosition().x > windowWidth)
         shapes[i].setPosition(shapes[i].getPosition().x - windowWidth, shapes[i].getPosition().y);

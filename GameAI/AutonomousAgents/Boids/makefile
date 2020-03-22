@@ -9,11 +9,14 @@ SFML = -lsfml-graphics -lsfml-window -lsfml-system
 
 all: boids
 
-boids: Boid.o Vector2D.o main.o World.o
-	$(CC) $(STD) $(DEBUG) Boid.o Vector2D.o World.o main.o -o boids $(SFML)
+boids: Boid.o Flock.o Vector2D.o main.o World.o
+	$(CC) $(STD) $(DEBUG) Boid.o Flock.o Vector2D.o World.o main.o -o boids $(SFML)
 
 Boid.o : Boid.cpp
 	$(CC) $(STD) $(CFLAGS) $(DEBUG) Boid.cpp
+
+Flock.o : Flock.cpp
+	$(CC) $(STD) $(CFLAGS) $(DEBUG) Flock.cpp
 
 Vector2D.o : Vector2D.cpp
 	$(CC) $(STD) $(CFLAGS) $(DEBUG) Vector2D.cpp
@@ -21,11 +24,13 @@ Vector2D.o : Vector2D.cpp
 World.o : World.cpp
 	$(CC) $(STD) $(CFLAGS) $(DEBUG) World.cpp
 
+.PHONY: clean
 clean:
-	\rm edit *.o boids
+	-rm *.o boids
 
 tar:
 	tar cfv boids.tar \
 	Vector2D.h Vector2D.cpp \
 	Boid.h Boid.cpp \
+	Flock.h Flock.cpp \
 	World.cpp World.h

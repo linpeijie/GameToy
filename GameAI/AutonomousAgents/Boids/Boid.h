@@ -11,6 +11,11 @@
 #include "Vector2D.h"
 #include "C2DMatrix.h"
 
+using namespace std;
+
+#define PI 3.14159265358
+#define	RAND_MAX 0x7fffffff
+
 // -----------------------The Boid Class------------------------
 // 属性：
 // location: boid的位置向量
@@ -18,7 +23,7 @@
 // acceleration: boid的当前加速度
 // maxSpeed: 速度矢量极限值
 // maxForce: 加速度矢量极限值
-// elapsed: 当前时刻和上一时刻的差值
+// elapsed: 增量时间
 // wanderRadius: 圆半径
 // wanderDistance: 目标移动距离
 // wanderJitter: 目标点随机抖动值
@@ -40,7 +45,6 @@ private:
     float maxForce;
     int winWidth;
     int winHeight;
-
     double elapsed;
 
     float wanderRadius;
@@ -48,29 +52,33 @@ private:
     float wanderJitter;
     Vector2D wanderTarget;
 
+    int neighbor[500];
+
 public:
     Boid() {}
     ~Boid() {}
+
     Boid(float x, float y);
+    void setWindow(int width, int height);
+    void setElapsed(double e);
 
     Vector2D location;
     Vector2D velocity;
     Vector2D acceleration;
     // The Steering Behavior
-    Vector2D separation(std::vector<Boid> boids);
-    Vector2D alignment(std::vector<Boid> boids);
-    Vector2D cohesion(std::vector<Boid> boids);
+    Vector2D separation(vector<Boid> boids);
+    Vector2D alignment(vector<Boid> boids);
+    Vector2D cohesion(vector<Boid> boids);
 
-    void steeringBehavior();
+    void steeringBehavior(vector<Boid> boids);
     Vector2D seek(Vector2D v);
     Vector2D wander();
 
-    void run();
-    void setWindow(int width, int height);
-    void setElapsed(double e);
+    void run(vector<Boid> boids);
     void update();
     void isOutBorders();
     void applyForce(Vector2D force);
+    float angle(Vector2D v);
 };
 
 #endif
