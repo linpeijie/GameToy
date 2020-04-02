@@ -1,5 +1,5 @@
 // 网易雷火笔试1
-//
+// 斐波那契数列
 #include <iostream>
 #include <cstdio>
 #include <string>
