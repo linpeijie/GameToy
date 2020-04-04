@@ -31,6 +31,7 @@ Game::Game():
     drawPaths = shared_ptr<Node>(new Node(sourceTile));
 }
 
+// 启动
 void Game::run()
 {
     sf::Clock clock;
@@ -40,9 +41,9 @@ void Game::run()
         handleInput();
         render();
 
+        // 延迟渲染查找路径
         if (running && drawPaths)
         {
-            // Slow down A*
             sf::Time time = clock.getElapsedTime();
             bool timePassed = time.asMilliseconds() > 100.f;
 
@@ -104,6 +105,7 @@ inline void Game::handleInput()
             }
             else if (event.key.code == sf::Keyboard::S)
             {
+                // 这里是为了防止未清理地图就重置节点
                 if (!running)
                     setSourceOrTarget(sf::Keyboard::S);
             }
@@ -127,6 +129,7 @@ inline void Game::handleInput()
     }
 }
 
+// 渲染
 inline void Game::render()
 {
     window.clear();
@@ -141,11 +144,11 @@ void Game::runPathPlaning()
 
     if (running && keyCode == sf::Keyboard::A)
     {
-        // A*算法 计算路径
+        // A*算法 计算路径, 先获取全部的查找路径，再获取最短路径
         list<shared_ptr<Point> > path = astar.GetPath(source, target, false);
-        list<shared_ptr<Point> > path2 = astar.getSearchPath();
+        list<shared_ptr<Point> > searchPath = astar.getSearchPath();
 
-        for (auto &tile: path2)
+        for (auto &tile: searchPath)
         {
             Tile t(sf::IntRect(tile->y*tileSize, tile->x*tileSize, tileSize, tileSize), tile::SearchPath);
             shared_ptr<Node> p(new Node(t));

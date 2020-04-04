@@ -41,14 +41,8 @@ private:
     int                        calcF(shared_ptr<Point> point);
 
 public:
-    Astar()
-    {
-        cout << "Init Astar！" << endl;
-    }
-    ~Astar()
-    {
-        cout << "Delete Astar Memory!" << endl;
-    }
+    Astar() {}
+    ~Astar() {}
     Astar(vector<vector<int> > _maze);
 
     void                       setMaze(vector<vector<int> > _maze);

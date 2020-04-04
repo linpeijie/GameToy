@@ -26,6 +26,7 @@ list<shared_ptr<Point> > Astar::GetPath(Point startPoint, Point endPoint, bool i
     return path;
 }
 
+// A*算法 主体
 shared_ptr<Point> Astar::findPath(Point startPoint, Point endPoint, bool isIgnoreCorner)
 {
     // 一定要记得把这两个数组清空，不然会发生内存错误
@@ -37,9 +38,9 @@ shared_ptr<Point> Astar::findPath(Point startPoint, Point endPoint, bool isIgnor
 
     while (!openList.empty())
     {
-        auto curPoint = getLeastFpoint(); //找到F值最小的点
-        openList.remove(curPoint); //从开启列表中删除
-        closeList.push_back(curPoint); //放到关闭列表
+        auto curPoint = getLeastFpoint();
+        openList.remove(curPoint);
+        closeList.push_back(curPoint);
         //1,找到当前周围八个格中可以通过的格子
         auto surroundPoints = getSurroundPoints(curPoint,isIgnoreCorner);
         for(auto &target:surroundPoints)
@@ -58,16 +59,17 @@ shared_ptr<Point> Astar::findPath(Point startPoint, Point endPoint, bool isIgnor
             //3，对某一个格子，它在开启列表中，计算G值, 如果比原来的大, 就什么都不做, 否则设置它的父节点为当前点,并更新G和F
             else
             {
-                int tempG=calcG(curPoint,target);
+                int tempG = calcG(curPoint,target);
                 if(tempG<target->G)
                 {
-                    target->parent=curPoint;
+                    target->parent = curPoint;
 
-                    target->G=tempG;
-                    target->F=calcF(target);
+                    target->G = tempG;
+                    target->F = calcF(target);
                 }
             }
-            shared_ptr<Point> resPoint=isInList(openList, newEndPoint);
+            // 如果找到了目标节点，直接返回即可
+            shared_ptr<Point> resPoint = isInList(openList, newEndPoint);
             if(resPoint)
                 return resPoint; //返回列表里的节点指针，不要用原来传入的endpoint指针，因为发生了深拷贝
         }
