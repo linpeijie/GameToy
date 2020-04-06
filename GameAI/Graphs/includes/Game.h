@@ -7,6 +7,8 @@
 #include "SFML/System.hpp"
 #include "../includes/Tile.h"
 #include "../Astar/Astar.h"
+#include "../BFS/BFS.h"
+#include "../Dijkstra/Dijkstra.h"
 
 using namespace std;
 
@@ -40,6 +42,8 @@ private:
     Point source;
     Point target;
     Astar astar;
+    BFS bfs;
+    Dijkstra dijkstra;
 
 public:
     Game();

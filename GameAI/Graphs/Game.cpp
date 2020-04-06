@@ -28,6 +28,8 @@ Game::Game():
     targetTile = Tile(sf::IntRect(width - tileSize, height - tileSize, tileSize, tileSize), tile::End);
     // 寻路算法初始化
     astar = Astar(maze);
+    bfs = BFS(maze);
+    dijkstra = Dijkstra(maze);
     drawPaths = shared_ptr<Node>(new Node(sourceTile));
 }
 
@@ -79,6 +81,14 @@ inline void Game::handleInput()
             {
                 keyCode = sf::Keyboard::A;
             }
+            else if (event.key.code == sf::Keyboard::B)
+            {
+                keyCode = sf::Keyboard::B;
+            }
+            else if (event.key.code == sf::Keyboard::D)
+            {
+                keyCode = sf::Keyboard::D;
+            }
             else if (event.key.code == sf::Keyboard::R)
             {
                 // 只有重置地图后才能再次运行
@@ -95,6 +105,8 @@ inline void Game::handleInput()
                         }
                     }
                     astar.setMaze(maze);
+                    bfs.setMaze(maze);
+                    dijkstra.setMaze(maze);
 
                     runPathPlaning();
                 }
@@ -163,7 +175,50 @@ void Game::runPathPlaning()
             drawPaths->next = p;
             drawPaths = drawPaths->next;
         }
+    }else if (running && keyCode == sf::Keyboard::B)
+    {
+        // BFS算法 计算路径
+        list<shared_ptr<Point> > path = bfs.GetPath(source, target, false);
+        list<shared_ptr<Point> > searchPath = bfs.getSearchPath();
+
+        for (auto &tile: searchPath)
+        {
+            Tile t(sf::IntRect(tile->y*tileSize, tile->x*tileSize, tileSize, tileSize), tile::SearchPath);
+            shared_ptr<Node> p(new Node(t));
+            drawPaths->next = p;
+            drawPaths = drawPaths->next;
+        }
+
+        for (auto &tile: path)
+        {
+            Tile t(sf::IntRect(tile->y*tileSize, tile->x*tileSize, tileSize, tileSize), tile::Path);
+            shared_ptr<Node> p(new Node(t));
+            drawPaths->next = p;
+            drawPaths = drawPaths->next;
+        }
+    }else if (running && keyCode == sf::Keyboard::D)
+    {
+        // BFS算法 计算路径
+        list<shared_ptr<Point> > path = dijkstra.GetPath(source, target, false);
+        list<shared_ptr<Point> > searchPath = dijkstra.getSearchPath();
+
+        for (auto &tile: searchPath)
+        {
+            Tile t(sf::IntRect(tile->y*tileSize, tile->x*tileSize, tileSize, tileSize), tile::SearchPath);
+            shared_ptr<Node> p(new Node(t));
+            drawPaths->next = p;
+            drawPaths = drawPaths->next;
+        }
+
+        for (auto &tile: path)
+        {
+            Tile t(sf::IntRect(tile->y*tileSize, tile->x*tileSize, tileSize, tileSize), tile::Path);
+            shared_ptr<Node> p(new Node(t));
+            drawPaths->next = p;
+            drawPaths = drawPaths->next;
+        }
     }
+
 
     drawPaths = head->next;
 }
@@ -186,6 +241,8 @@ void Game::clear()
 
     maze = vector<vector<int>>(height/tileSize, vector<int>(width/tileSize, 0));
     astar.setMaze(maze);
+    bfs.setMaze(maze);
+    dijkstra.setMaze(maze);
 
     sourceTile = Tile(sf::IntRect(0, 0, tileSize, tileSize), tile::Start);
     targetTile = Tile(sf::IntRect(width - tileSize, height - tileSize, tileSize, tileSize), tile::End);
